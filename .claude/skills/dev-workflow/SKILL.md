@@ -13,7 +13,7 @@ description: 새 기능 개발을 시작하거나 기획/설계, 상세개발계
 |------|------|------|
 | 기획/설계 | superpowers/brainstorming | Opus |
 | 상세개발계획 | superpowers/writing-plans | Opus |
-| 구현/테스트 | superpowers/subagent-driven-development, superpowers/test-driven-development | Sonnet 5 |
+| 구현/테스트 | superpowers/subagent-driven-development, superpowers/test-driven-development | Sonnet |
 | 최종리뷰 | superpowers/requesting-code-review | Opus |
 
 - SDD 진행 중 태스크별 리뷰는 구현 단계에 속하므로 Sonnet 5로 진행한다.
