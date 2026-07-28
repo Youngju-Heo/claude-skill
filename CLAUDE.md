@@ -70,4 +70,16 @@
 
 ## 7. 기능 개발 워크플로
 
+<!-- 두 워크플로 중 프로젝트에 맞는 하나만 남기고, 다른 쪽은 주석 처리하라.
+     HTML 주석은 컨텍스트에 로드되지 않으므로 남겨둬도 비용이 없다.
+     devops-workflow를 선택해도 dev-workflow 스킬은 설치되어 있어야 한다
+     (개발 절차를 위임받는다). -->
+
 새 기능의 기획/설계, 개발계획, 구현, 리뷰 절차와 문서 규칙은 `dev-workflow` 스킬을 따르라.
+
+<!-- [Azure DevOps 프로젝트용 — 선택 시 위 줄을 주석 처리하고 아래를 해제]
+모든 개발은 Azure DevOps Work Item에서 시작한다. 새 일감 작업은 사용자가
+`/devops-workflow {work-item-id}`로 시작하며, Work Item 기반 작업 요청을
+받으면 이 스킬의 실행을 안내하라. 개발 절차와 문서 규칙은 devops-workflow가
+`dev-workflow` 스킬에 위임한다. -->
+
