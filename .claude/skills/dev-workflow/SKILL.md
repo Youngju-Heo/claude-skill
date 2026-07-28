@@ -9,12 +9,12 @@ description: 새 기능 개발을 시작하거나 기획/설계, 상세개발계
 
 ## 단계별 스킬·모델 규칙
 
-| 단계 | 스킬 | 모델 |
-|------|------|------|
-| 기획/설계 | superpowers/brainstorming | Opus |
-| 상세개발계획 | superpowers/writing-plans | Opus |
-| 구현/테스트 | superpowers/subagent-driven-development, superpowers/test-driven-development | Sonnet |
-| 최종리뷰 | superpowers/requesting-code-review | Opus |
+| 단계         | 스킬                                                                         | 모델   |
+| ------------ | ---------------------------------------------------------------------------- | ------ |
+| 기획/설계    | superpowers/brainstorming                                                    | Opus   |
+| 상세개발계획 | superpowers/writing-plans                                                    | Opus   |
+| 구현/테스트  | superpowers/subagent-driven-development, superpowers/test-driven-development | Sonnet |
+| 최종리뷰     | superpowers/requesting-code-review                                           | Opus   |
 
 - SDD 진행 중 태스크별 리뷰는 구현 단계에 속하므로 Sonnet 5로 진행한다.
 - 최종리뷰는 전체 브랜치를 **1회만** 리뷰한다. 추가 리뷰 라운드나 재검증 패스를 스스로 만들지 마라.
@@ -36,7 +36,10 @@ description: 새 기능 개발을 시작하거나 기획/설계, 상세개발계
 
 - 새 기획 시작 시 `{feature-name}` 기반으로 브랜치를 만들고 시작하라.
 - 작업 단계별로 git에 커밋하여 이력을 저장하라.
-- 커밋 메시지는 한국어로 작성하라.
+- **커밋 메시지 형식**: `<type>: #<일감번호> <제목 (한글 가능)>` + 본문(선택)
+  - type 예시: `feat`, `fix`, `refactor`, `chore`, `docs`
+  - #<일감번호>: DevOps, Zira 등 형상관리 도구에 사용하는 번호가 있을 경우, 없으면 생략
+- **`Co-Authored-By` 문구 사용 금지** — 커밋 메시지에 포함하지 않음
 
 ## 문서 규칙
 
