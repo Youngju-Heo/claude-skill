@@ -44,8 +44,8 @@ description: 새 기능 개발을 시작하거나 기획/설계, 상세개발계
 ## 문서 규칙
 
 - 기획/계획 작성 시 반드시 markdown 파일로 저장하라.
-  - 설계: `docs/feature/yyyy-mm-dd-{day-sequence}-{feature-name}-design.md`
-  - 계획: `docs/feature/yyyy-mm-dd-{day-sequence}-{feature-name}-plan.md`
+  - 설계: `docs/feature/yyyy-mm/yyyy-mm-dd-{day-sequence}-{feature-name}-design.md`
+  - 계획: `docs/feature/yyyy-mm/yyyy-mm-dd-{day-sequence}-{feature-name}-plan.md`
   - `{day-sequence}`는 그날 순번 2자리, `01`부터. 계획은 해당 설계와 동일한 순번을 쓴다.
 - 설계 문서에는 해당 기능의 주요 엔티티·모듈 네이밍 항목을 포함하라.
   구현은 이 네이밍을 따른다. (코드 네이밍 상세 규칙은 `.claude/rules/`의
