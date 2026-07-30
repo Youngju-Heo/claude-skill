@@ -45,12 +45,30 @@ Opus 5 출시에 맞춰 기존 카파시 스타일 CLAUDE.md를 조정한 구성
 정상입니다. 기획/설계나 새 기능 개발을 시작하면 description에 의해 자동으로
 로드되고, `/dev-workflow`로 직접 호출할 수도 있습니다.
 
-## 2. 사전 조건
+## 2. 사전 조건 — superpowers 플러그인 설치
 
 - 스킬 본문이 superpowers 플러그인의 스킬들(brainstorming, writing-plans,
   subagent-driven-development, test-driven-development,
   requesting-code-review)을 참조하므로, superpowers 플러그인이 설치되어
   있어야 합니다.
+
+  Claude Code에서 아래 명령으로 설치합니다. 공식 마켓플레이스(권장):
+
+  ```
+  /plugin install superpowers@claude-plugins-official
+  ```
+
+  또는 커뮤니티 마켓플레이스(obra/superpowers)를 등록해 설치합니다:
+
+  ```
+  /plugin marketplace add obra/superpowers-marketplace
+  /plugin install superpowers@superpowers-marketplace
+  ```
+
+  설치 후 Claude Code를 재시작하고 `/plugin` 메뉴에서 superpowers가
+  활성 상태인지, 위 스킬들이 스킬 목록에 보이는지 확인합니다.
+- devops-workflow를 쓰는 프로젝트는 Azure DevOps 접근 수단이 추가로
+  필요합니다 — 6장의 사전 조건을 참조하세요.
 - 기존 CLAUDE.md에 있던 5번(문서화)·6번(개발 진행) 항목은 스킬로 이동했으니,
   교체 후 기존 파일에 남은 사본이 없는지 확인하세요. 같은 내용이 CLAUDE.md와
   스킬 양쪽에 있으면 중복 지시가 되어 Opus 5에서는 오히려 손해입니다.
@@ -203,12 +221,65 @@ Azure DevOps의 Task를 확인하고 → dev-workflow 절차로 개발하고 →
 - Azure DevOps 접근 수단이 하나 필요합니다. 둘 중 하나:
   - **Azure DevOps MCP 서버** (권장): Microsoft 공식
     `microsoft/azure-devops-mcp`를 `claude mcp add`로 등록
-  - **az CLI**: `az extension add --name azure-devops` 후
-    `az devops login` (PAT 필요)
+  - **az CLI**: 설치·설정 방법은 바로 아래 참조
   - az CLI를 쓸 경우의 제약: `az repos pr`에 댓글 명령이 없고 Work Item
     댓글도 조회가 안 됩니다. 스킬이 `az devops invoke`(REST 직접 호출)로
     우회하는 규칙을 담고 있지만 본문 JSON 파일·인코딩·api-version을 직접
     다뤄야 하므로, MCP 쪽이 단순합니다.
+
+### az CLI 설치·설정
+
+1. **Azure CLI 설치**
+
+   ```
+   winget install --exact --id Microsoft.AzureCLI   # Windows
+   brew install azure-cli                            # macOS
+   curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash   # Ubuntu/Debian
+   ```
+
+2. **DevOps 확장 추가**
+
+   ```
+   az extension add --name azure-devops
+   ```
+
+3. **PAT(Personal Access Token) 발급**: Azure DevOps 우상단 User
+   settings → Personal access tokens에서 생성합니다. 필요한 스코프는
+   Work Items (Read & Write), Code (Read & Write)입니다(PR 생성 포함).
+
+4. **로그인**
+
+   ```
+   az devops login --organization https://dev.azure.com/{조직명}
+   ```
+
+   실행 후 프롬프트에 PAT를 붙여넣습니다. 비대화형 환경(CI 등)에서는
+   환경변수 `AZURE_DEVOPS_EXT_PAT`에 PAT를 넣으면 로그인 없이 동작합니다.
+
+5. **기본 조직·프로젝트 설정** (권장)
+
+   ```
+   az devops configure --defaults organization=https://dev.azure.com/{조직명} project={프로젝트명}
+   ```
+
+   이후 명령에서 `--organization`/`--project`를 생략할 수 있어, 스킬이
+   실행하는 명령이 짧고 실수 여지가 줄어듭니다.
+
+6. **동작 확인**
+
+   ```
+   az boards work-item show --id {일감번호}
+   ```
+
+   Work Item JSON이 출력되면 설정 완료입니다.
+
+운영 참고:
+
+- PAT에는 만료 기한이 있습니다. 만료되면 `az devops login`부터 다시
+  하면 되고, 인증 오류(TF400813 등)가 갑자기 나면 PAT 만료를 먼저
+  의심하세요.
+- PAT는 비밀번호와 동일하게 취급하세요 — 저장소나 문서에 커밋하지
+  말고, 환경변수로 쓸 때는 셸 프로필 등 로컬에만 둡니다.
 
 ### 사용법
 
