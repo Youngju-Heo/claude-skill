@@ -89,5 +89,6 @@
 모든 개발은 Azure DevOps Work Item에서 시작한다. 새 일감 작업은 사용자가
 `/devops-workflow {work-item-id}`로 시작하며, Work Item 기반 작업 요청을
 받으면 이 스킬의 실행을 안내하라. 개발 절차와 문서 규칙은 devops-workflow가
-`dev-workflow` 스킬에 위임한다.
+`dev-workflow` 스킬에 위임한다. 다만 사용자 사정상 WorkItem 제공하지 않은
+경우 `dev-workflow` 스킬을 따라 진행.
 -->
