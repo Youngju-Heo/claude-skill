@@ -79,7 +79,11 @@
      devops-workflow를 선택해도 dev-workflow 스킬은 설치되어 있어야 한다
      (개발 절차를 위임받는다). -->
 
-새 기능의 기획/설계, 개발계획, 구현, 리뷰 절차와 문서 규칙은 `dev-workflow` 스킬을 따르라.
+모든 개발은 Azure DevOps Work Item에서 시작한다. 새 일감 작업은 사용자가
+`/devops-workflow {work-item-id}`로 시작하며, Work Item 기반 작업 요청을
+받으면 이 스킬의 실행을 안내하라. 개발 절차와 문서 규칙은 devops-workflow가
+`dev-workflow` 스킬에 위임한다. 다만 사용자 사정상 WorkItem 제공하지 않은
+경우 `dev-workflow` 스킬을 따라 진행.
 
 <!-- [DevOps 사용하지 않는 개발의 경우 적용할 스킬로 일반적 개발사항 적용]
 새 기능의 기획/설계, 개발계획, 구현, 리뷰 절차와 문서 규칙은 `dev-workflow` 스킬을 따르라.
