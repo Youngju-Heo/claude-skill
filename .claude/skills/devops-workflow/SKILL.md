@@ -14,11 +14,13 @@ Azure DevOps의 Task를 출발점으로, 확인 → 개발 → 완료 처리까�
 ## 0. 사전 확인
 
 - Azure DevOps 접근 수단을 확인하라. 우선순위:
-  1. Azure DevOps MCP 도구가 연결되어 있으면 그것을 사용
-  2. 없으면 `az` CLI(azure-devops 확장): `az boards work-item show --id <id>`
-  3. 둘 다 없으면 사용자에게 설정을 요청하고 중단하라. 임의로 REST API
-     토큰을 요구하거나 우회하지 마라.
-- 조직/프로젝트 정보가 필요한데 알 수 없으면 사용자에게 물어라.
+  1. **REST 헬퍼** `scripts/ado.ps1` — 이 환경의 기본 수단이다.
+     (아래 "인코딩 함정과 REST 우선" 참고)
+  2. 읽기 전용이고 결과에 비ASCII 가 없다면 `az` CLI 도 무방:
+     `az boards work-item show --id <id>`
+  3. 둘 다 안 되면 사용자에게 설정을 요청하고 중단하라. 사용자에게
+     **새 PAT 발급을 요구하지 마라** — 인증은 기존 az 로그인 세션에서만 얻는다.
+- Azure DevOps MCP 서버는 사용하지 않음. **먼저 요구하기 전에는 다시 제안하지 마라.**
 
 ## 1. Task 확인
 
@@ -30,7 +32,7 @@ Azure DevOps의 Task를 출발점으로, 확인 → 개발 → 완료 처리까�
 - 부모 항목(User Story/PBI)의 제목과 설명 — Task만으로 맥락이 부족하면
   반드시 부모까지 읽어라
 - 댓글(Discussion)과 연결된 항목(관련 Work Item, PR, 커밋)
-  — `az` CLI로는 댓글 조회 명령이 없다. 아래 "az CLI로 댓글 다루기" 참고
+  — `az` CLI로는 댓글 조회 명령이 없다. 아래 "인코딩 함정과 REST 우선" 참고
 - 현재 상태(State)와 담당자(Assigned To)
 
 정리한 요구사항을 사용자에게 요약해 보여줘라. 요구사항 자체를 확정하는
@@ -81,16 +83,22 @@ Azure DevOps의 Task를 출발점으로, 확인 → 개발 → 완료 처리까�
 
 1. **PR을 생성하라.** Work Item 브랜치 → 통합 브랜치(main/develop 등,
    저장소의 기본 대상 브랜치)로 PR을 만들어라. 직접 머지는 금지다.
-   - Azure Repos면 MCP 도구 또는 `az repos pr create`, GitHub이면
-     `gh pr create`를 사용하라.
+   - Azure Repos면 `New-AdoPullRequest`(scripts/ado.ps1), GitHub이면
+     `gh pr create`를 사용하라. **`az repos pr create` 는 쓰지 마라** —
+     제목·본문의 한글이 유실된다(아래 참고).
+   - **대상 브랜치를 확인하고 만들어라.** 저장소의 기본 브랜치가 실제
+     통합 브랜치가 아닐 수 있다. `git branch -r` 로 최근 갱신된 브랜치를
+     보고, 작업 브랜치의 분기점이 어느 원격 브랜치의 tip 인지
+     (`git merge-base` / `git log`) 확인한 뒤 정하라. 잘못 잡으면 수백
+     커밋짜리 PR 이 만들어진다.
    - PR 설명에 포함할 것: 작업 요약, 설계/계획 문서 경로, 인수 조건별
      충족 여부. Work Item이 연결되도록 `#{work-item-id}`(또는
      `AB#{work-item-id}`)를 명시하라.
    - PR 머지는 수행하지 마라. 머지는 리뷰어/사용자의 결정이다.
 2. Work Item에 결과 댓글을 남겨라. 포함할 것: 작업 요약(3~5줄),
    설계/계획 문서 경로, 브랜치명, PR 링크, 인수 조건별 충족 여부.
-   PR에도 같은 내용을 댓글로 남길 경우 아래 "az CLI로 댓글 다루기"를
-   따르라 — `az repos pr`에는 댓글 명령이 없다.
+   **댓글 본문에 한글이 들어가므로 반드시 REST 로 작성하라** — 아래
+   "인코딩 함정과 REST 우선" 참고. `az repos pr`에는 댓글 명령 자체가 없다.
 3. 남은 작업량(Remaining Work) 필드가 있으면 0으로 갱신하라.
 4. **사용자에게 완료 전환 여부를 확인받은 뒤** 상태를 완료 상태로
    전환하라(예: Agile은 Closed, Scrum은 Done). 확인 없이 상태를
@@ -99,58 +107,62 @@ Azure DevOps의 Task를 출발점으로, 확인 → 개발 → 완료 처리까�
 5. 처리 후 최종 상태를 조회해 실제로 반영됐는지 확인하고 사용자에게
    Work Item 링크·PR 링크와 함께 보고하라.
 
-## az CLI로 댓글 다루기
+## 인코딩 함정과 REST 우선
 
-MCP 도구가 있으면 그것을 쓰라. `az` CLI만 있을 때 이 절을 따른다.
+**이 환경의 `az` CLI 는 비ASCII 를 신뢰할 수 없다.** 2026-08 세션에서 확인:
 
-az CLI(azure-devops 확장)에는 **PR 댓글 명령이 아예 없고**, Work Item
-댓글도 작성만 되고 조회는 안 된다. 없는 것은 `az devops invoke`로
-처리하라 — REST API를 호출하지만 az CLI 로그인 인증을 그대로 쓰므로
-0단계의 "토큰 우회 금지"에 걸리지 않는다.
+- `az repos pr create --title "한글..." --description @file.md` 로 만든 PR 은
+  제목·본문의 **한글이 통째로 사라진 채** 저장됐다. 인자로 넘기든 `@파일`로
+  넘기든 같았고, PowerShell 에서 실행해도 같았다.
+- 응답도 마찬가지다. az 는 콘솔 코드페이지(cp949)로 출력하므로 일본어처럼
+  cp949 에 없는 문자는 `Unable to encode the output with cp949 encoding.
+  Unsupported characters are discarded.` 경고와 함께 버려진다. `chcp 65001`,
+  `PYTHONIOENCODING=utf-8`, `[Console]::OutputEncoding` 모두 효과가 없었다.
+- `az devops invoke` 는 **PR 갱신(PATCH)을 지원하지 않는다**
+  (`The requested resource does not support http method 'PATCH'.`).
 
-| 작업 | 방법 |
-| --- | --- |
-| Work Item 댓글 작성 | `az boards work-item update --id <id> --discussion "<내용>"` |
-| Work Item 댓글 조회 | `az devops invoke --area wit --resource comments` |
-| PR 댓글(스레드) 작성·조회 | `az devops invoke --area git --resource pullRequestThreads` |
-| PR 댓글에 답글 | `az devops invoke --area git --resource pullRequestThreadComments` |
+따라서 **비ASCII 가 한 글자라도 들어가는 조작은 쓰기든 읽기든 아래 헬퍼로
+하라.** 순수 ASCII 읽기(상태 확인, ID 조회 등)에만 `az` CLI 를 써도 된다.
 
-### invoke 사용 규칙
+### 헬퍼 사용법
 
-- `--http-method`의 기본값은 GET이다. 작성할 때는 `POST`를 명시하라.
-- 본문은 인라인으로 못 넘긴다. JSON 파일을 만들어 `--in-file`로 줘라.
-- **본문 파일은 BOM 없는 UTF-8이어야 한다.** Windows PowerShell 5.1의
-  `>`/`Out-File` 기본 인코딩은 UTF-16LE라 그대로 쓰면 파싱 에러가 난다.
-  pwsh 7의 `Set-Content -Encoding utf8`을 쓰거나 `--encoding utf-8`을
-  붙여라.
-- `--api-version`을 반드시 명시하라. 생략하면 상당수 리소스가 실패한다.
-  안정 리소스는 `7.1`, work item comments 같은 프리뷰는 `7.1-preview.3`.
-- `--route-parameters`는 REST 경로 이름 그대로 쓴다:
-  `project`, `repositoryId`, `pullRequestId`, `workItemId`.
-- area/resource 이름이 확실치 않으면 인자 없이 `az devops invoke`를
-  실행해 목록을 확인하라(느리므로 필요할 때만).
+```powershell
+. "$HOME/.claude/skills/devops-workflow/scripts/ado.ps1"
 
-### PR 댓글 작성 예
-
-`thread.json` (BOM 없는 UTF-8):
-
-```json
-{
-  "comments": [
-    { "parentCommentId": 0, "content": "리뷰 코멘트", "commentType": 1 }
-  ],
-  "status": 1
-}
+Add-AdoWorkItemComment -Project prod -Id 351 -Html "<b>완료</b><br>내용"
+Set-AdoWorkItemState   -Id 351 -State "완료"
+New-AdoPullRequest -Project prod -Repository crbengine `
+  -SourceBranch 351-foo -TargetBranch crb-detector-build `
+  -Title "feat: #351 제목" -Description $desc -WorkItemIds 351,353
+Update-AdoPullRequest -Project prod -Repository crbengine -Id 59 -Description $desc
+Add-AdoPullRequestComment -Project prod -Repository crbengine -Id 59 -Text "리뷰 코멘트"
+Get-AdoPullRequest -Project prod -Repository crbengine -Id 59
+Get-AdoWorkItem -Id 351
 ```
 
-```bash
-az devops invoke --area git --resource pullRequestThreads \
-  --route-parameters project=<proj> repositoryId=<repo> pullRequestId=<id> \
-  --http-method POST --in-file thread.json --api-version 7.1 --output json
-```
+임의 엔드포인트는 `Invoke-Ado -Path <경로> -Method <메서드> -Body <해시테이블>`
+로 호출한다. 요청 본문을 UTF-8 바이트로 직접 넘기고 `Invoke-RestMethod` 로
+응답을 받으므로 인코딩이 흔들리지 않는다.
 
-특정 파일·라인에 달려면 본문에 `threadContext`(`filePath`,
-`rightFileStart`, `rightFileEnd`)를 추가하라.
+### 인증 규칙
+
+헬퍼는 `az account get-access-token --resource 499b84ac-1321-427f-aa17-267ca6975798`
+으로 **이미 로그인된 az 세션에서 파생된 토큰**을 쓴다. 이는 0단계가 금지하는
+"토큰 우회"가 아니다 — 그 금지의 취지는 *사용자에게 새 PAT 를 발급받게 하지
+말라*는 것이다. 새 자격증명을 요구하는 것만 금지이고, 기존 로그인 재사용은
+허용된다. az 로그인이 만료되면 헬퍼도 함께 멈추므로 `az login` 을 안내하라.
+
+### 그래도 az CLI 가 필요한 경우
+
+`az` CLI 에 없는 기능은 `az devops invoke` 로도 가능하지만, 위 PATCH 제약과
+인코딩 문제가 그대로 남으므로 **헬퍼를 먼저 쓰라.** invoke 를 굳이 쓴다면:
+
+- `--http-method` 기본값은 GET 이다. 쓰기는 `POST` 를 명시하라.
+- 본문은 인라인으로 못 넘긴다. **BOM 없는 UTF-8** JSON 파일을 `--in-file` 로 줘라.
+- `--api-version` 을 반드시 명시하라(안정 리소스 `7.1`, work item comments 는
+  `7.1-preview.3`).
+- `--route-parameters` 는 REST 경로 이름 그대로: `project`, `repositoryId`,
+  `pullRequestId`, `workItemId`.
 
 ## 제약
 

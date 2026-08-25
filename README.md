@@ -218,16 +218,25 @@ Azure DevOps의 Task를 확인하고 → dev-workflow 절차로 개발하고 →
 ### 사전 조건
 
 - dev-workflow 스킬이 함께 설치되어 있어야 합니다(개발 절차를 위임).
-- Azure DevOps 접근 수단이 하나 필요합니다. 둘 중 하나:
-  - **Azure DevOps MCP 서버** (권장): Microsoft 공식
-    `microsoft/azure-devops-mcp`를 `claude mcp add`로 등록
-  - **az CLI**: 설치·설정 방법은 바로 아래 참조
-  - az CLI를 쓸 경우의 제약: `az repos pr`에 댓글 명령이 없고 Work Item
-    댓글도 조회가 안 됩니다. 스킬이 `az devops invoke`(REST 직접 호출)로
-    우회하는 규칙을 담고 있지만 본문 JSON 파일·인코딩·api-version을 직접
-    다뤄야 하므로, MCP 쪽이 단순합니다.
+- Azure DevOps 접근은 **az CLI 로그인 + 동봉 REST 헬퍼가 기본 경로**입니다.
+  아래 "az CLI 설치·설정"만 마치면 추가 설치 없이 동작합니다.
+  - **REST 헬퍼** `scripts/ado.ps1` (스킬 동봉): az 로그인 세션에서 파생한
+    토큰으로 REST API를 직접 호출합니다. 별도 PAT 발급이 필요 없고,
+    Work Item 조회·댓글·상태 전환, PR 생성·수정·댓글까지 스킬에 필요한
+    조작을 전부 커버합니다.
+  - az CLI 명령 단독 사용은 순수 ASCII 읽기(상태 확인, ID 조회)에
+    한정합니다. az CLI는 콘솔 코드페이지(cp949)를 거치며 PR 제목·본문,
+    댓글의 한글을 유실하므로, 비ASCII가 들어가는 조작은 스킬이 REST
+    헬퍼로 우회합니다. 상세는 스킬의 "인코딩 함정과 REST 우선" 참조.
+  - **Azure DevOps MCP 서버는 사용하지 않습니다.** 이 스킬이 하는 일
+    기준으로 헬퍼와 기능 차이가 없는데, Node.js 의존과 조직 전체
+    도메인(파이프라인·위키 포함) 노출이 추가되기 때문입니다. 설치돼
+    있어도 스킬은 헬퍼를 사용합니다.
 
 ### az CLI 설치·설정
+
+스킬의 기본 접근 경로입니다. REST 헬퍼가 az 로그인 세션에서 인증
+토큰을 얻으므로 이 설정이 선행돼야 합니다.
 
 1. **Azure CLI 설치**
 
@@ -243,20 +252,17 @@ Azure DevOps의 Task를 확인하고 → dev-workflow 절차로 개발하고 →
    az extension add --name azure-devops
    ```
 
-3. **PAT(Personal Access Token) 발급**: Azure DevOps 우상단 User
-   settings → Personal access tokens에서 생성합니다. 필요한 스코프는
-   Work Items (Read & Write), Code (Read & Write)입니다(PR 생성 포함).
-
-4. **로그인**
+3. **로그인**
 
    ```
-   az devops login --organization https://dev.azure.com/{조직명}
+   az login
    ```
 
-   실행 후 프롬프트에 PAT를 붙여넣습니다. 비대화형 환경(CI 등)에서는
-   환경변수 `AZURE_DEVOPS_EXT_PAT`에 PAT를 넣으면 로그인 없이 동작합니다.
+   브라우저로 Microsoft 계정 인증합니다. **PAT 발급은 필요 없습니다** —
+   헬퍼와 스킬은 이 로그인 세션에서 파생한 토큰만 사용합니다(스킬
+   0단계의 "새 PAT 발급 금지" 규칙과 일치).
 
-5. **기본 조직·프로젝트 설정** (권장)
+4. **기본 조직·프로젝트 설정** (권장)
 
    ```
    az devops configure --defaults organization=https://dev.azure.com/{조직명} project={프로젝트명}
@@ -265,7 +271,7 @@ Azure DevOps의 Task를 확인하고 → dev-workflow 절차로 개발하고 →
    이후 명령에서 `--organization`/`--project`를 생략할 수 있어, 스킬이
    실행하는 명령이 짧고 실수 여지가 줄어듭니다.
 
-6. **동작 확인**
+5. **동작 확인**
 
    ```
    az boards work-item show --id {일감번호}
@@ -273,13 +279,8 @@ Azure DevOps의 Task를 확인하고 → dev-workflow 절차로 개발하고 →
 
    Work Item JSON이 출력되면 설정 완료입니다.
 
-운영 참고:
-
-- PAT에는 만료 기한이 있습니다. 만료되면 `az devops login`부터 다시
-  하면 되고, 인증 오류(TF400813 등)가 갑자기 나면 PAT 만료를 먼저
-  의심하세요.
-- PAT는 비밀번호와 동일하게 취급하세요 — 저장소나 문서에 커밋하지
-  말고, 환경변수로 쓸 때는 셸 프로필 등 로컬에만 둡니다.
+운영 참고: 로그인 세션이 만료되면 인증 오류가 갑자기 나기 시작합니다.
+`az login`을 다시 하면 되고, 헬퍼도 같은 세션을 쓰므로 함께 복구됩니다.
 
 ### 사용법
 

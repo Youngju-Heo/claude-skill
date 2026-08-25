@@ -17,7 +17,9 @@ claude-skill/
     │   ├── dev-workflow/
     │   │   └── SKILL.md       # 기능 개발 워크플로 (기획→계획→구현→리뷰)
     │   └── devops-workflow/
-    │       └── SKILL.md       # Azure DevOps 일감 연동 — 선택 적용
+    │       ├── SKILL.md       # Azure DevOps 일감 연동 — 선택 적용
+    │       └── scripts/
+    │           └── ado.ps1    # REST 헬퍼 — az CLI 비ASCII 유실 우회
     └── rules/
         ├── code-common.md     # 언어 공통 규칙 — paths 없음, 항상 로드
         ├── python.md          # Python 규칙 — **/*.py 작업 시 로드
@@ -34,7 +36,8 @@ claude-skill/
   superpowers 플러그인 필요.
 - **devops-workflow 스킬**: Azure DevOps Work Item에서 시작해 개발 절차는
   dev-workflow에 위임하고, PR 생성·결과 댓글·상태 전환까지 처리한다.
-  Azure DevOps MCP 또는 az CLI가 필요하며,
+  접근은 az CLI 로그인 + 동봉 REST 헬퍼(ado.ps1)로 하며, Azure DevOps
+  MCP 서버는 사용하지 않는다.
   `disable-model-invocation: true`라 사용자가 직접 호출할 때만 실행된다.
 - **rules**: 하네스가 `paths` glob 매칭으로 자동 주입하는 코드 규칙.
   언어별 파일은 예시이며 팀 컨벤션에 맞게 수정해서 쓴다.
