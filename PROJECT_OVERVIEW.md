@@ -9,10 +9,10 @@ Claude Code용 설정 템플릿 저장소입니다. 판단 원칙(CLAUDE.md), �
 
 ```
 claude-skill/
-├── CLAUDE.md                  # 판단 원칙 — 항상 로드
 ├── README.md                  # 적용법 가이드 (배치·조정 이유·배치 결정 가이드)
 ├── PROJECT_OVERVIEW.md        # 이 문서
 └── .claude/
+    ├── CLAUDE.md              # 판단 원칙 — 항상 로드
     ├── skills/
     │   ├── dev-workflow/
     │   │   └── SKILL.md       # 기능 개발 워크플로 (기획→계획→구현→리뷰)
@@ -44,7 +44,7 @@ claude-skill/
 
 ## 적용 방법
 
-`CLAUDE.md`와 `.claude/` 폴더를 대상 프로젝트 루트에 복사한 뒤,
+`.claude/` 폴더를 대상 프로젝트 루트에 복사한 뒤,
 CLAUDE.md의 "7. 기능 개발 워크플로"에서 두 워크플로 중 프로젝트에 맞는
 지시문 하나만 활성화한다(나머지는 HTML 주석 처리).
 상세한 배치 옵션, 규칙 작성 요령, 새 규칙의 배치 결정 가이드는
