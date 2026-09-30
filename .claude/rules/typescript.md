@@ -10,9 +10,8 @@ paths:
 
 ## 네이밍
 
-- 변수/함수: camelCase, 타입/인터페이스/컴포넌트: PascalCase,
-  상수: UPPER_SNAKE_CASE
-- 파일명: 일반 모듈은 kebab-case.ts, React 컴포넌트는 PascalCase.tsx
+- 변수/함수: camelCase, 타입/인터페이스/컴포넌트: PascalCase, 상수: UPPER_SNAKE_CASE
+- 파일명: 일반 모듈은 kebab-case.ts, React 컴포넌트도 kebab-case.tsx
 - 인터페이스에 I 접두사를 붙이지 마라.
 - 도메인 용어는 영어로 번역해 사용하라(로마자 표기 금지).
 
