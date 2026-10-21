@@ -49,3 +49,14 @@ CLAUDE.md의 "7. 기능 개발 워크플로"에서 두 워크플로 중 프로�
 지시문 하나만 활성화한다(나머지는 HTML 주석 처리).
 상세한 배치 옵션, 규칙 작성 요령, 새 규칙의 배치 결정 가이드는
 [README.md](README.md)를 참조.
+
+
+## Codex용 추가 구성
+
+- AGENTS.md: 프로젝트 공통 판단 원칙, 한국어 정책, 언어별 규칙 참조.
+- .agents/skills/dev-workflow/: 경량·전체 개발 경로. 외부 superpowers나 특정 모델에 의존하지 않음.
+- .agents/skills/devops-workflow/: 명시적 호출 전용 Azure DevOps 절차. 원본 REST 헬퍼를 함께 제공.
+- .agents/rules/: AGENTS.md가 조건부로 읽는 Python·TypeScript 규칙.
+- CODEX-SETUP.md: 복사 방법, 호출 예, Azure 준비, 원본과의 차이점.
+
+.claude/의 기존 파일은 변경하지 않습니다. Codex 적용 시 AGENTS.md와 .agents/를 프로젝트 루트에 복사합니다. 기존 파일이 있으면 덮어쓰지 않고 병합합니다.

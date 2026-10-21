@@ -347,3 +347,8 @@ devops-workflow를 쓰는 프로젝트에도 dev-workflow가 반드시 설치되
 이후에는 deletion test로 다듬어 가세요: 규칙을 하나 지우고 결과 품질이
 유지되면 그 규칙은 불필요한 오버헤드였던 것입니다. `claude doctor`로 현재
 설정 진단도 가능합니다.
+
+
+## 8. Codex에서 함께 사용하기
+
+기존 Claude 구성은 그대로 유지합니다. Codex는 프로젝트 루트의 `AGENTS.md`와 `.agents/skills/`를 사용합니다. 대상 프로젝트에는 `AGENTS.md`와 규칙 문서까지 포함한 `.agents/` 폴더 전체를 복사하세요. 설치·사용 예·차이점은 [CODEX-SETUP.md](CODEX-SETUP.md)를 참조하세요.
