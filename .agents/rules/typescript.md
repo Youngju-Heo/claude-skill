@@ -1,7 +1,16 @@
-# TypeScript / TSX 규칙
+# TypeScript 코드 규칙
 
-- 기존 코드 및 ESLint·Prettier·TypeScript 설정을 우선한다.
-- 새 인터페이스 이름에는 I 접두사를 붙이지 않는다.
-- 도메인 용어는 영어로 표현하고 로마자 음역을 피한다.
-- 이벤트 핸들러는 handleEvent, 콜백 prop은 onEvent 형태를 기본으로 한다.
-- 일반 모듈과 React 컴포넌트 파일명은 kebab-case를 기본으로 하되 프레임워크 예약 파일명은 따른다.
+<!-- 예시 규칙입니다. 팀 컨벤션에 맞게 수정하세요.
+     생태계 표준(camelCase 등)과 동일한 항목은 삭제해도 됩니다. -->
+
+## 네이밍
+
+- 변수/함수: camelCase, 타입/인터페이스/컴포넌트: PascalCase, 상수: UPPER_SNAKE_CASE
+- 파일명: 일반 모듈은 kebab-case.ts, React 컴포넌트도 kebab-case.tsx
+- 인터페이스에 I 접두사를 붙이지 마라.
+- 도메인 용어는 영어로 번역해 사용하라(로마자 표기 금지).
+
+## 스타일
+
+- 이벤트 핸들러는 handle{Event}, props로 넘기는 콜백은 on{Event}.
+- ESLint/Prettier 설정이 있으면 그것이 우선한다.
