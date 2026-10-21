@@ -27,7 +27,18 @@ description: 새 기능 개발과 기획·설계, 상세계획, 구현·테스�
 
 ## 단계별 실행 규칙
 
-- Claude의 단계별 superpowers 참조는 Codex에서 아래 절차로 수행한다. 사용 가능한 대응 스킬이 있으면 읽고 적용하되, 승인·TDD·리뷰 규칙을 생략하거나 완화하지 않는다.
+각 단계 시작 시 아래 스킬을 읽고 적용한다. 모델·추론 수준은 위의 Codex 기준을 따른다.
+
+| 단계 | 사용할 스킬 |
+| --- | --- |
+| 기획/설계 | `superpowers:brainstorming` |
+| 상세계획 | `superpowers:writing-plans` |
+| 구현/테스트 | `superpowers:subagent-driven-development`, `superpowers:test-driven-development` |
+| 최종리뷰 | `superpowers:requesting-code-review` |
+
+- 구현/테스트에서 서브에이전트 위임이 허용되고 독립적인 태스크로 나눌 수 있으면 `superpowers:subagent-driven-development`를 적용한다. 직접 실행하는 경우에는 `superpowers:executing-plans`와 `superpowers:test-driven-development`를 적용한다.
+- 스킬의 서브에이전트 사용 지침은 AGENTS.md와 사용자가 허용한 위임 범위 안에서 적용한다. 최종리뷰를 직접 수행하는 경우에도 `superpowers:requesting-code-review`의 리뷰 기준을 따른다.
+- 필요한 스킬을 사용할 수 없으면 해당 스킬과 제약을 보고하고 아래 절차를 직접 수행한다. 승인·TDD·리뷰 규칙을 생략하거나 완화하지 않는다.
 - 기획/설계에서는 원 요청, 인수 조건, 기존 구조와 대안을 확인한다. 상세계획에는 수정 파일, 작업 순서, 테스트 방법을 작성한다.
 - 구현/테스트에서는 버그 재현 테스트를 먼저 작성하고 실패 → 수정 → 통과 순서로 진행한다. 프로젝트 필수 검사와 변경 관련 테스트를 수행하고 실행하지 못한 검사는 이유를 보고한다.
 - SDD를 수행하는 경우 태스크별 리뷰는 구현 단계에 속하며 구현 단계의 모델·추론 기준을 따른다. 위임은 사용자가 요청했거나 프로젝트에서 명시적으로 허용한 범위에 한정한다.

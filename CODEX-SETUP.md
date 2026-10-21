@@ -4,12 +4,40 @@
 
 - `.claude/`: 원본 그대로 보존한 Claude 구성. README와 PROJECT_OVERVIEW에는 Codex 안내도 포함한다.
 - `AGENTS.md`: 새 Codex 프로젝트 지침.
-- `.agents/skills/dev-workflow/`: 외부 플러그인 없이 실행하는 개발 절차.
+- `.agents/skills/dev-workflow/`: superpowers 스킬을 단계별로 적용하는 개발 절차.
 - `.agents/skills/devops-workflow/`: 명시적으로 호출하는 Azure DevOps 절차와 원본 REST 헬퍼.
 - `.agents/rules/`: AGENTS.md가 언어별로 읽도록 지정하는 규칙 문서. 자동 glob 주입 기능이 아니다.
 
 원본: https://github.com/Youngju-Heo/claude-skill
 검토 기준 커밋: `59f40c1352505cee87c129bda665b664cfc3f881`
+
+## 사전 조건 — superpowers 설치
+
+`dev-workflow`의 단계별 스킬을 사용하려면 **Codex에 superpowers 플러그인을 설치해야 한다**. 이 저장소의 `.agents` 폴더에는 superpowers가 포함되어 있지 않다. Claude Code에 설치했더라도 Codex에는 별도로 설치한다.
+
+### Codex 클라이언트에서 설치하기
+
+Codex 앱을 사용하는 경우 클라이언트 안에서 다음 순서로 설치한다.
+
+1. 사이드바에서 **Plugins**를 연다.
+2. **Coding** 항목의 **Superpowers**를 찾는다.
+3. 옆의 **+** 버튼을 누르고 안내에 따라 설치한다.
+
+### Codex CLI를 사용하는 경우
+
+1. Codex CLI 대화창에 `/plugins`를 입력한다.
+2. `superpowers`를 검색한다.
+3. **Install Plugin**을 선택한다.
+
+### 설치 확인
+
+설치 후 새 Codex 채팅을 열고 다음과 같이 조회만 요청한다. 스킬이 보이지 않으면 앱 또는 CLI를 재시작한다. 이미 설치되어 있고 스킬이 발견되면 다시 설치하지 않는다.
+
+> superpowers의 brainstorming, writing-plans, subagent-driven-development, executing-plans, test-driven-development, requesting-code-review 스킬이 발견되는지 확인해 주세요. 파일 수정과 외부 서비스 호출은 하지 마세요.
+
+이 스킬들은 기획/설계, 상세계획, 구현/테스트, 최종리뷰에 사용한다. 직접 구현하는 경우에는 `subagent-driven-development` 대신 `executing-plans`를 적용한다. 서브에이전트 위임 범위와 모델·추론 수준, 승인 규칙은 프로젝트의 AGENTS.md와 dev-workflow를 따른다.
+
+상세 설치 내용과 클라이언트별 최신 지원 사항은 [Superpowers 공식 설치 안내](https://github.com/obra/superpowers#installation)를 참조한다. 위 메뉴가 보이지 않거나 설치 과정이 다른 경우에도 해당 안내를 확인한다.
 
 ## 프로젝트에 복사하기
 
@@ -118,7 +146,7 @@ Codex는 선택된 스킬 경로를 기준으로 `scripts/ado.ps1`을 읽는다.
 |---|---|
 | 기본 지침 | 프로젝트 루트 AGENTS.md 또는 개인 공통 지침과 프로젝트 지침 조합 |
 | 스킬 설치 | 프로젝트 .agents/skills 또는 개인 공통 .agents/skills |
-| superpowers | 대응 절차를 직접 기술하고 사용 가능한 대응 스킬 적용. 승인·TDD·리뷰 의무 유지 |
+| superpowers | Codex용 플러그인을 별도 설치하고 단계별 지정 스킬 적용. 승인·TDD·리뷰 의무 유지 |
 | Opus/Sonnet 전환 | 기존 Sol·단계별 추론 수준 설정 유지. 불일치 시 변경 또는 현재 설정 진행 지시를 받음 |
 | 작은 변경 | 보고·컨펌 후 구현. 브랜치·커밋 규칙 동일 적용 |
 | 큰 변경 | 설계·계획 승인과 최종리뷰 후 컨펌 유지 |
