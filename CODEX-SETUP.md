@@ -3,7 +3,7 @@
 ## 포함한 파일
 
 - `.claude/`: 원본 그대로 보존한 Claude 구성. README와 PROJECT_OVERVIEW에는 Codex 안내도 포함한다.
-- `AGENTS.md`: 새 Codex 프로젝트 지침.
+- `.codex/AGENTS.md`: 대상 프로젝트 루트의 `AGENTS.md`로 복사할 코딩 지침. 저장소 루트 `AGENTS.md`는 유지보수 전용이며 배포하지 않는다.
 - `.agents/skills/dev-workflow/`: superpowers 스킬을 단계별로 적용하는 개발 절차.
 - `.agents/skills/devops-workflow/`: 명시적으로 호출하는 Azure DevOps 절차와 원본 REST 헬퍼.
 - `.agents/rules/`: AGENTS.md가 언어별로 읽도록 지정하는 규칙 문서. 자동 glob 주입 기능이 아니다.
@@ -42,7 +42,7 @@ Codex 앱을 사용하는 경우 클라이언트 안에서 다음 순서로 설�
 ## 프로젝트에 복사하기
 
 1. 이 저장소를 내려받거나 로컬 저장소 폴더를 연다.
-2. 대상 프로젝트 루트로 **AGENTS.md와 .agents 폴더만** 복사한다. 숨김 폴더 `.agents`도 반드시 포함한다.
+2. `.codex/AGENTS.md`를 대상 프로젝트 루트의 **AGENTS.md**로 복사하고, **.agents 폴더 전체**를 대상 프로젝트 루트에 복사한다. 숨김 폴더 `.agents`도 반드시 포함한다.
 3. 대상에 같은 이름의 파일이 있으면 덮어쓰지 말고 내용을 병합한다. 기존 AGENTS.override.md가 있으면 충돌하는 지침이 있는지 확인한다.
 4. 기존 Claude 설정은 그대로 둔다. `.claude/`와 이 저장소의 README·PROJECT_OVERVIEW를 대상 프로젝트 파일 위에 복사할 필요가 없다.
 5. 프로젝트를 Codex에서 열고 새 채팅을 시작한다. 스킬이 보이지 않으면 앱을 재시작한다.
@@ -69,8 +69,8 @@ Codex 앱을 사용하는 경우 클라이언트 안에서 다음 순서로 설�
 ### 이 저장소를 공통 설치하는 순서
 
 1. `.agents/skills/dev-workflow`와 `.agents/skills/devops-workflow` 폴더를 각각 `%USERPROFILE%\.agents\skills\` 아래로 복사한다. SKILL.md뿐 아니라 agents·scripts 하위 파일도 함께 복사한다.
-2. 저장소의 `AGENTS.md` 내용을 검토해 공통으로 적용할 부분을 `%USERPROFILE%\.codex\AGENTS.md`에 병합한다. 기존 공통 지침을 통째로 덮어쓰지 않는다. 모든 프로젝트에 개발 승인 절차를 적용하고 싶지 않다면 워크플로 선택 지침은 프로젝트에 남긴다.
-3. 언어별 규칙은 아래 두 방식 중 하나를 선택한다. 저장소의 AGENTS.md를 공통 위치에 그대로 복사하면 상대 경로가 프로젝트를 가리키므로, 참조를 반드시 함께 정리한다.
+2. 저장소의 `.codex/AGENTS.md` 내용을 검토해 공통으로 적용할 부분을 `%USERPROFILE%\.codex\AGENTS.md`에 병합한다. 기존 공통 지침을 통째로 덮어쓰지 않는다. 모든 프로젝트에 개발 승인 절차를 적용하고 싶지 않다면 워크플로 선택 지침은 프로젝트에 남긴다.
+3. 언어별 규칙은 아래 두 방식 중 하나를 선택한다. 저장소의 `.codex/AGENTS.md`를 공통 위치에 그대로 복사하면 상대 경로가 프로젝트를 가리키므로, 참조를 반드시 함께 정리한다.
 4. 각 프로젝트의 AGENTS.md에는 빌드·테스트 명령, 실제 통합 브랜치, 도메인 규칙 등 차이점만 적는다. DevOps 조직·프로젝트는 대상별로 지정하고 다른 프로젝트의 기본값을 그대로 사용하지 않는다.
 5. 프로젝트에서 새 Codex 채팅을 열고 앞의 조회 전용 검증 요청으로 적용 지침과 스킬 발견 여부를 확인한다.
 

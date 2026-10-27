@@ -53,10 +53,12 @@ CLAUDE.md의 "7. 기능 개발 워크플로"에서 두 워크플로 중 프로�
 
 ## Codex용 추가 구성
 
-- AGENTS.md: 프로젝트 공통 판단 원칙, 한국어 정책, 언어별 규칙 참조.
-- .agents/skills/dev-workflow/: Claude 원본과 동일한 경량·전체 경로의 승인·브랜치·커밋·문서 규칙. 실행 방법은 Codex에 맞추며 기존 모델·추론 수준 설정을 유지.
+- AGENTS.md: 이 저장소 유지보수 지침과 Codex 변경 이력 갱신 규칙. 배포 대상에서 제외한다.
+- .codex/AGENTS.md: 대상 프로젝트에 배포할 공통 판단 원칙, 한국어 정책, 언어별 규칙 참조.
+- .agents/skills/dev-workflow/: Claude 원본과 동일한 경량·전체 경로의 승인·브랜치·커밋·문서 규칙. 실행 방법은 Codex에 맞추며 Sol/Terra를 단계별로 조합하고 기존 추론 수준을 유지.
 - .agents/skills/devops-workflow/: 명시적 호출 전용 Azure DevOps 절차. 원본 REST 헬퍼를 함께 제공.
 - .agents/rules/: AGENTS.md가 조건부로 읽는 Python·TypeScript 규칙.
 - CODEX-SETUP.md: 복사 방법, 호출 예, Azure 준비, 원본과의 차이점.
+- CODEX_HISTORY.md: Codex용 지침·스킬·설정 및 관련 문서의 날짜별 변경 이력.
 
-.claude/의 기존 파일은 변경하지 않습니다. Codex 적용 시 AGENTS.md와 .agents/를 프로젝트 루트에 복사합니다. 기존 파일이 있으면 덮어쓰지 않고 병합합니다.
+.claude/의 기존 파일은 변경하지 않습니다. Codex 적용 시 .codex/AGENTS.md를 대상 프로젝트 루트의 AGENTS.md로 복사하고 .agents/ 폴더 전체를 함께 복사합니다. 기존 파일이 있으면 덮어쓰지 않고 병합합니다.

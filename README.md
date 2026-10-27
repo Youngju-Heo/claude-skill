@@ -351,6 +351,6 @@ devops-workflow를 쓰는 프로젝트에도 dev-workflow가 반드시 설치되
 
 ## 8. Codex에서 함께 사용하기
 
-기존 Claude 구성은 그대로 유지합니다. Codex는 프로젝트 루트의 `AGENTS.md`와 `.agents/skills/`를 사용합니다. 대상 프로젝트에는 `AGENTS.md`와 규칙 문서까지 포함한 `.agents/` 폴더 전체를 복사하세요. 설치·사용 예·차이점은 [CODEX-SETUP.md](CODEX-SETUP.md)를 참조하세요.
+기존 Claude 구성은 그대로 유지합니다. Codex는 프로젝트 루트의 `AGENTS.md`와 `.agents/skills/`를 사용합니다. 대상 프로젝트에는 `.codex/AGENTS.md`를 루트의 `AGENTS.md`로 복사하고, 규칙 문서까지 포함한 `.agents/` 폴더 전체를 복사하세요. 이 저장소 루트의 `AGENTS.md`는 유지보수 전용이므로 배포하지 않습니다. 설치·사용 예·차이점은 [CODEX-SETUP.md](CODEX-SETUP.md)를 참조하세요.
 
 Codex의 관리 정책은 Claude 원본과 동일하게 적용합니다. 경량 수정도 보고·컨펌 후 구현하며, 새 기획 시작 시 브랜치를 생성하고 단계별로 커밋합니다. 설계·계획 승인 및 최종리뷰 후 컨펌을 유지합니다. 도구별 호출·경로와 기존 Codex 모델·추론 수준 설정은 구분합니다.
