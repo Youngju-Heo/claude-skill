@@ -381,8 +381,9 @@ Task 제목 앞 머리말로 처리 방식이 정해지며, 없으면 추천 후
 1. Task와 부모 Issue·Epic, 댓글 조회 (부모가 Issue가 아니면 중단)
 2. Issue 폴더·머리말·진행 중 전환을 한 번에 확인
 3. 머리말별 처리 후 Issue 폴더(`docs` `meeting` `mail` `output` `reference`)에 기록
-4. 변경 파일 확인 후 main에 커밋·push, Task에 결과 댓글 작성
-5. 사용자 확인 후 완료 전환 (`[메일]`은 대응 종료 시에만)
+4. 변경 파일 확인 후 main에 커밋·push, push마다 Task에 결과 요약 댓글 작성
+5. 완료 전 Task·Issue Description이 부실하면 결과 기반 요약 초안을 확인받아 보완
+6. 사용자 확인 후 완료 전환 (`[메일]`은 대응 종료 시에만)
 
 ## 8. 적용 후 점검
 
