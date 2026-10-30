@@ -1,9 +1,9 @@
 # CLAUDE.md + 스킬·규칙 적용법
 
 Opus 5 출시에 맞춰 기존 카파시 스타일 CLAUDE.md를 조정한 구성입니다.
-구성은 4가지입니다: `CLAUDE.md`(판단 원칙), `dev-workflow`(개발 절차),
-`devops-workflow`(Azure DevOps 일감 연동, 선택), `.claude/rules/`(언어별
-코드 규칙).
+구성은 5가지입니다: `CLAUDE.md`(판단 원칙), `dev-workflow`(개발 절차),
+`devops-workflow`(Azure DevOps 일감 연동, 선택), `preproj-workflow`(개발
+선행 업무 처리, 선택), `.claude/rules/`(언어별 코드 규칙).
 
 ## 1. 파일 배치
 
@@ -332,7 +332,59 @@ devops-workflow를 쓰는 프로젝트에도 dev-workflow가 반드시 설치되
    결과 댓글(문서 경로·브랜치·PR·인수 조건 충족 여부) 작성 →
    사용자 확인 후 완료 상태 전환 → 반영 확인 및 보고
 
-## 7. 적용 후 점검
+## 7. preproj-workflow 스킬 (개발 선행 업무)
+
+Azure DevOps의 Task(Epic → Issue → Task 구조)를 받아 메일 대응, 미팅 정리,
+조사, 요구사항 정리, 테스트 개발 같은 개발 선행 업무를 처리하고, 산출물을
+`preproj` 저장소의 Issue 폴더에 기록한 뒤 Task를 갱신하는 스킬입니다.
+특정 프로젝트에 묶이지 않는 업무이므로 전역 배치를 권장합니다.
+
+```
+~/.claude/skills/preproj-workflow/SKILL.md
+```
+
+프로젝트 루트(`{프로젝트 루트}/.claude/skills/preproj-workflow/`)에 둘 수도
+있지만, 이 스킬은 다른 저장소(`preproj`)에서 작업하므로 전역이 편합니다.
+
+### 사전 조건
+
+- **devops-workflow가 설치되어 있어야 합니다.** 이 스킬은
+  `$HOME/.claude/skills/devops-workflow/scripts/ado.ps1`(REST 헬퍼)을
+  참조해 쓰므로, devops-workflow를 `~/.claude/skills/`에 설치하고 6장의
+  az CLI 로그인까지 마쳐야 합니다. 스킬은 전역 경로에 `ado.ps1`이 없으면
+  `{cwd}/.claude/skills/devops-workflow/scripts/ado.ps1`을 시도하고, 그래도 없으면
+  위치를 묻고 중단합니다.
+- `[테스트개발]`은 dev-workflow 절차를 따르므로 dev-workflow도 전역
+  (`~/.claude/skills/`)에 있어야 합니다.
+- `preproj` 저장소의 로컬 클론이 필요합니다. 위치는 환경변수
+  `PREPROJ_ROOT`, 없으면 `C:\work\preproj`입니다.
+
+### 사용법
+
+```
+/preproj-workflow 12345
+```
+
+`disable-model-invocation: true`라 사용자가 직접 호출할 때만 실행됩니다.
+Task 제목 앞 머리말로 처리 방식이 정해지며, 없으면 추천 후 확인을 받습니다.
+
+| 머리말 | 처리 |
+|---|---|
+| `[메일]` | `.eml` 원본·첨부를 상대방 단위 폴더에 누적 보관(우리 발송본은 `out`), 요약 누적. 회신 초안은 요청 시에만 |
+| `[미팅]` | 미팅 폴더의 메모·자료 정리·요약 |
+| `[조사]` | 조사 후 자료는 `reference/`, 결과는 `output/` |
+| `[정리]` | 기존 자료 기반 요구사항 분석·설계·분류 |
+| `[테스트개발]` | dev-workflow 절차 수행 (PR 없이 main 직접 머지) |
+
+### 동작 요약
+
+1. Task와 부모 Issue·Epic, 댓글 조회 (부모가 Issue가 아니면 중단)
+2. Issue 폴더·머리말·진행 중 전환을 한 번에 확인
+3. 머리말별 처리 후 Issue 폴더(`docs` `meeting` `mail` `output` `reference`)에 기록
+4. 변경 파일 확인 후 main에 커밋·push, Task에 결과 댓글 작성
+5. 사용자 확인 후 완료 전환 (`[메일]`은 대응 종료 시에만)
+
+## 8. 적용 후 점검
 
 한두 작업을 실제로 돌려보고 아래를 확인하세요.
 
@@ -349,7 +401,7 @@ devops-workflow를 쓰는 프로젝트에도 dev-workflow가 반드시 설치되
 설정 진단도 가능합니다.
 
 
-## 8. Codex에서 함께 사용하기
+## 9. Codex에서 함께 사용하기
 
 기존 Claude 구성은 그대로 유지합니다. Codex는 프로젝트 루트의 `AGENTS.md`와 `.agents/skills/`를 사용합니다. 대상 프로젝트에는 `.codex/AGENTS.md`를 루트의 `AGENTS.md`로 복사하고, 규칙 문서까지 포함한 `.agents/` 폴더 전체를 복사하세요. 이 저장소 루트의 `AGENTS.md`는 유지보수 전용이므로 배포하지 않습니다. 설치·사용 예·차이점은 [CODEX-SETUP.md](CODEX-SETUP.md)를 참조하세요.
 

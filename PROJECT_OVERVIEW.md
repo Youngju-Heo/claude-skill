@@ -2,7 +2,7 @@
 
 Claude Code용 설정 템플릿 저장소입니다. 판단 원칙(CLAUDE.md), 개발
 워크플로 스킬(dev-workflow), Azure DevOps 일감 연동 스킬(devops-workflow),
-언어별 코드 규칙(rules)을 실제 운영 배치 구조 그대로 담고 있어, 실제
+개발 선행 업무 처리 스킬(preproj-workflow), 언어별 코드 규칙(rules)을 실제 운영 배치 구조 그대로 담고 있어, 실제
 프로젝트 루트에 복사하면 바로 동작합니다.
 
 ## 구조
@@ -16,10 +16,12 @@ claude-skill/
     ├── skills/
     │   ├── dev-workflow/
     │   │   └── SKILL.md       # 기능 개발 워크플로 (기획→계획→구현→리뷰)
-    │   └── devops-workflow/
-    │       ├── SKILL.md       # Azure DevOps 일감 연동 — 선택 적용
-    │       └── scripts/
-    │           └── ado.ps1    # REST 헬퍼 — az CLI 비ASCII 유실 우회
+    │   ├── devops-workflow/
+    │   │   ├── SKILL.md       # Azure DevOps 일감 연동 — 선택 적용
+    │   │   └── scripts/
+    │   │       └── ado.ps1    # REST 헬퍼 — az CLI 비ASCII 유실 우회
+    │   └── preproj-workflow/
+    │       └── SKILL.md       # 개발 선행 업무(메일·미팅·조사 등) 처리 — 선택 적용
     └── rules/
         ├── code-common.md     # 언어 공통 규칙 — paths 없음, 항상 로드
         ├── python.md          # Python 규칙 — **/*.py 작업 시 로드
@@ -39,6 +41,11 @@ claude-skill/
   접근은 az CLI 로그인 + 동봉 REST 헬퍼(ado.ps1)로 하며, Azure DevOps
   MCP 서버는 사용하지 않는다.
   `disable-model-invocation: true`라 사용자가 직접 호출할 때만 실행된다.
+- **preproj-workflow 스킬**: Azure DevOps Task(Epic → Issue → Task)를
+  머리말(`[메일]` `[미팅]` `[조사]` `[정리]` `[테스트개발]`)별로 처리하고
+  산출물을 `preproj` 저장소의 Issue 폴더에 기록한 뒤 Task를 갱신한다.
+  devops-workflow의 `ado.ps1`을 참조하므로 devops-workflow 설치가 필요하다.
+  `disable-model-invocation: true`라 `/preproj-workflow {task-id}`로만 실행된다.
 - **rules**: 하네스가 `paths` glob 매칭으로 자동 주입하는 코드 규칙.
   언어별 파일은 예시이며 팀 컨벤션에 맞게 수정해서 쓴다.
 
@@ -47,6 +54,8 @@ claude-skill/
 `.claude/` 폴더를 대상 프로젝트 루트에 복사한 뒤,
 CLAUDE.md의 "7. 기능 개발 워크플로"에서 두 워크플로 중 프로젝트에 맞는
 지시문 하나만 활성화한다(나머지는 HTML 주석 처리).
+preproj-workflow는 특정 프로젝트에 묶이지 않으므로 전역(`~/.claude/skills/`)
+배치를 권장하며, 이때 devops-workflow·dev-workflow도 전역에 있어야 한다.
 상세한 배치 옵션, 규칙 작성 요령, 새 규칙의 배치 결정 가이드는
 [README.md](README.md)를 참조.
 
