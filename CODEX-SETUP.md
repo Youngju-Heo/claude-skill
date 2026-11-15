@@ -154,6 +154,7 @@ Codex는 선택된 스킬 경로를 기준으로 `scripts/ado.ps1`을 읽는다.
 | 검증 | 관련 검사와 최종리뷰 후 근거 없는 반복 금지 |
 | DevOps 자동 실행 | agents/openai.yaml의 allow_implicit_invocation: false |
 | 언어별 규칙 | AGENTS.md에서 조건부 읽기 지정 |
+| 프로젝트 문서 | Claude의 code-common.md와 Codex의 AGENTS.md 모두 변경에 따른 README.md·PROJECT_OVERVIEW.md 갱신, PROJECT_OVERVIEW.md 부재 시 구조·주요 구성 요소·사용법을 담아 생성 |
 | 한국어 | 응답·문서·커밋·GUI 한국어, 로그·CLI 영어 |
 
 공식 참고:

@@ -48,6 +48,8 @@ claude-skill/
   `disable-model-invocation: true`라 `/preproj-workflow {task-id}`로만 실행된다.
 - **rules**: 하네스가 `paths` glob 매칭으로 자동 주입하는 코드 규칙.
   언어별 파일은 예시이며 팀 컨벤션에 맞게 수정해서 쓴다.
+  `code-common.md`는 변경에 따른 README.md·PROJECT_OVERVIEW.md 갱신과,
+  PROJECT_OVERVIEW.md가 없을 때 현재 프로젝트의 구조·주요 구성 요소·사용법을 담은 문서 생성을 요구한다.
 
 ## 적용 방법
 

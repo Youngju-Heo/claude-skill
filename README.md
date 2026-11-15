@@ -170,6 +170,10 @@ Claude Code는 작업 디렉토리 하위의 `.claude/skills/`도 인식합니�
 `paths`가 있는 규칙은 해당 패턴의 파일을 읽을 때 로드됩니다. 패턴은
 glob 문법이며 brace 확장(`*.{ts,tsx}`), 복수 패턴 지정이 가능합니다.
 
+`code-common.md`는 변경으로 README.md나 PROJECT_OVERVIEW.md의 내용이
+실제와 달라지면 같은 작업에서 갱신하도록 합니다. PROJECT_OVERVIEW.md가
+없으면 현재 프로젝트의 구조, 주요 구성 요소, 사용법을 담아 새로 작성합니다.
+
 ```markdown
 ---
 paths:
