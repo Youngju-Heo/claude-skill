@@ -5,12 +5,6 @@ Codex용 지침·스킬·설정 및 관련 문서의 변경사항을 최신 날�
 
 ## 2026-11-15
 
-### Claude 문서 생성 규칙과 관련 안내 동기화
-
-- Claude에서도 문서 부재를 이유로 생성을 생략하지 않도록 `code-common.md`에 Codex와 동일한 PROJECT_OVERVIEW.md 생성 의무를 추가했다.
-- README와 프로젝트 개요에 문서 갱신·생성 규칙을 안내하고, Codex 설치 안내에 두 도구의 동일한 적용 기준을 명시했다.
-- 관련 파일: `.claude/rules/code-common.md`, `README.md`, `PROJECT_OVERVIEW.md`, `CODEX-SETUP.md`, `CODEX_HISTORY.md`.
-
 ### PROJECT_OVERVIEW.md 부재 시 생성 의무 명시
 
 - 문서가 없다는 이유로 갱신 대상에서 제외하는 해석을 막기 위해, PROJECT_OVERVIEW.md가 없으면 현재 프로젝트의 구조, 주요 구성 요소, 사용법을 담아 새로 작성하도록 명시했다.
