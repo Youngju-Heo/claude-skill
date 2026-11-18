@@ -3,6 +3,14 @@
 Codex용 지침·스킬·설정 및 관련 문서의 변경사항을 최신 날짜순으로 기록한다.
 각 항목에는 변경 내용, 이유, 관련 파일을 포함한다.
 
+## 2026-11-19
+
+### 단계별 모델을 Sol로 통일
+
+- 경량 작업은 Sol / Light에서 Sol / Medium으로, 구현·테스트는 Terra / High에서 Sol / Medium으로 변경해 모든 단계에서 Sol을 사용하도록 했다. 기획·설계, 상세계획, 최종리뷰는 Sol / High, 디버깅은 Sol / Medium을 유지한다.
+- 구현·테스트의 Sol / Medium이 같은 구현 문제를 반복해서 해결하지 못하면 해당 구현을 Sol / High로 전환하도록 전환 기준을 정리하고, Terra 관련 문구를 제거했다.
+- 관련 파일: `.agents/skills/dev-workflow/SKILL.md`, `PROJECT_OVERVIEW.md`, `CODEX-SETUP.md`, `CODEX_HISTORY.md`.
+
 ## 2026-11-15
 
 ### PROJECT_OVERVIEW.md 부재 시 생성 의무 명시

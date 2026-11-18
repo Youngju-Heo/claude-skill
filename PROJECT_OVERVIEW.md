@@ -66,7 +66,7 @@ preproj-workflow는 특정 프로젝트에 묶이지 않으므로 전역(`~/.cla
 
 - AGENTS.md: 이 저장소 유지보수 지침과 Codex 변경 이력 갱신 규칙. 배포 대상에서 제외한다.
 - .codex/AGENTS.md: 대상 프로젝트에 배포할 공통 판단 원칙, 한국어 정책, 언어별 규칙 참조.
-- .agents/skills/dev-workflow/: Claude 원본과 동일한 경량·전체 경로의 승인·브랜치·커밋·문서 규칙. 실행 방법은 Codex에 맞추며 단계별 Sol/Terra 모델·추론 수준과 디버깅·반복 해결 실패 시 전환 기준을 적용.
+- .agents/skills/dev-workflow/: Claude 원본과 동일한 경량·전체 경로의 승인·브랜치·커밋·문서 규칙. 실행 방법은 Codex에 맞추며 단계별 Sol 모델·추론 수준과 디버깅·반복 해결 실패 시 전환 기준을 적용.
 - .agents/skills/devops-workflow/: 명시적 호출 전용 Azure DevOps 절차. 원본 REST 헬퍼를 함께 제공.
 - .agents/rules/: AGENTS.md가 조건부로 읽는 Python·TypeScript 규칙.
 - CODEX-SETUP.md: 복사 방법, 호출 예, Azure 준비, 원본과의 차이점.
