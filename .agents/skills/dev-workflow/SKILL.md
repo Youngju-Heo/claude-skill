@@ -85,11 +85,10 @@ description: 새 기능 개발과 기획·설계, 상세계획, 구현·테스�
 - 작업 단계별로 git에 커밋하여 이력을 저장하라.
 - **커밋 메시지 형식**:
   - DevOps Work Item 작업: `<type>: #<일감번호> <제목>`
-  - DevOps Work Item이 없는 작업: `<type>: [<전체 브랜치명>] <제목>`
-  - 전체 브랜치명은 `codex/` 등의 접두사를 포함한 실제 브랜치명을 그대로 사용한다.
+  - DevOps Work Item이 없는 작업: `<type>: <feature-name> <제목>`
   - type 예시: `feat`, `fix`, `refactor`, `chore`, `docs`
   - 예: `feat: #12345 시장 조회 API 추가`
-  - 예: `docs: [codex/market-stream-doc-repair] 3-2 사후 설계와 문서 상태 보완`
+  - 예: `docs: market-stream-doc-repair 3-2 사후 설계와 문서 상태 보완`
   - 이 형식은 이후 새로 만드는 커밋부터 적용한다. 형식 적용만을 위해 기존 커밋을 다시 작성하지 않는다.
 - 커밋 메시지는 이력만으로 변경 목적과 주요 내용을 이해할 수 있도록 작성한다. 제목만으로 충분하지 않으면 본문에 변경 이유와 핵심 내용을 보충한다.
 - **`Co-Authored-By` 문구 사용 금지** — 커밋 메시지에 포함하지 않음

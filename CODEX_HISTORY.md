@@ -5,6 +5,11 @@ Codex용 지침·스킬·설정 및 관련 문서의 변경사항을 최신 날�
 
 ## 2026-11-19
 
+### Work Item 없는 작업의 커밋 메시지 형식 변경
+
+- DevOps Work Item이 없는 작업의 커밋 메시지 형식을 `<type>: [<전체 브랜치명>] <제목>`에서 `<type>: <feature-name> <제목>`으로 변경해, 브랜치 접두사 없이 기능 이름으로 작업을 식별하도록 했다.
+- 관련 파일: `.agents/skills/dev-workflow/SKILL.md`, `CODEX_HISTORY.md`.
+
 ### 단계별 모델을 Sol로 통일
 
 - 경량 작업은 Sol / Light에서 Sol / Medium으로, 구현·테스트는 Terra / High에서 Sol / Medium으로 변경해 모든 단계에서 Sol을 사용하도록 했다. 기획·설계, 상세계획, 최종리뷰는 Sol / High, 디버깅은 Sol / Medium을 유지한다.
